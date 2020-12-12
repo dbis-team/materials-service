@@ -1,0 +1,19 @@
+{
+  "name": "google-storage-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/main.js"
+  },
+  "author": "Andrii Antonenko",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^5.7.0",
+    "dotenv": "^8.2.0",
+    "fastify": "^3.9.1",
+    "fastify-multipart": "^3.3.1",
+    "uuid": "^8.3.2"
+  }
+}
