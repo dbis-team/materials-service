@@ -1,31 +1,32 @@
 const fastify = require('fastify');
-const { v4: uuidV4 } = require('uuid');
-const { GoogleStoreService } = require('./libs/google_storage');
-const { MATERIALS_BUCKET_NAME } = require('./libs/config');
+
+const { saveLearningMaterials } = require('./service/learning_materials');
+const { getFilesByIds } = require('./service/get_files');
+const { deleteFile } = require('./service/delete_file');
 
 function configureFastifyServer() {
   const server = fastify({ logger: true });
   server.register(require('fastify-multipart'));
 
-  server.post('/learning-materials', async (request, reply) => {
-    try {
-      const parts = await request.files()
-      const urls = [];
-      for await (const part of parts) {
-        const extention = part.filename.split('.').slice(-1)[0];
-        const url = await GoogleStoreService.getInstance()
-          .uploadFileToBucket(MATERIALS_BUCKET_NAME, part.file, `${uuidV4()}.${extention}`);
-  
-        urls.push({
-          url,
-          filename: part.filename
-        });
-      }
-  
-      return urls;    
-    } catch (error) {
-      return { error };   
-    }
+  server.post('/learning-materials', async (request) => {
+    const parts = await request.files()
+    const res = await saveLearningMaterials(parts);
+
+    return res;
+  });
+
+  server.get('/learning-materials', async (request) => {
+    const ids = request.query.ids || [];
+    const res = await getFilesByIds(ids);
+
+    return res;
+  });
+
+  server.delete('/learning-materials/:id', async (request) => {
+    const { id } = request.params;
+    const res = await deleteFile(id);
+
+    return res;
   });
 
   return server;

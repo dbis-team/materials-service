@@ -37,6 +37,11 @@ class GoogleStoreService {
         .on('error', reject);
     });
   }
+
+  async deleteFile(bucketName, filename) {
+    const files = await this.storage.bucket(bucketName).getFiles({ prefix: filename });
+    await Promise.all(files[0].map(file => file.delete()));
+  }
 }
 
 module.exports = { GoogleStoreService };
