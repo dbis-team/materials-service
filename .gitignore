@@ -3,3 +3,7 @@
 node_modules/
 secrets/*
 db-data
+
+
+.kube/*secrets.yml
+.kube/*secrets.yaml
