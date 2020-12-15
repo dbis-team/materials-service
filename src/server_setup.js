@@ -6,7 +6,11 @@ const { deleteFile } = require('./service/delete_file');
 
 function configureFastifyServer() {
   const server = fastify({ logger: true });
+
   server.register(require('fastify-multipart'));
+  server.register(require('fastify-cors'), {
+    origin: '*'
+  });
 
   server.post('/learning-materials', async (request) => {
     const parts = await request.files()
